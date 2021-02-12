@@ -1,0 +1,60 @@
+---
+- hosts: localhost
+  become: yes
+  vars:
+    - user: 'loic'
+    - dotfiles_repo: 'git@github.com:lololand/config.git'
+    - ssh_key: '.ssh/id_git'
+
+  tasks:
+    - name: "Install system packages"
+      apt: 
+        name:
+          - vim 
+          - bat
+          - exa
+          - podman
+          - python3
+        state: latest
+
+    - name: "Install Python packages"
+      pip:
+        name:
+          - certifi
+        state: latest
+
+    - name: "Check out conf from repository"
+      git:
+        repo: "{{ conf_repo }}"
+        dest: ./conf_tmp
+        accept_hostkey: yes
+        force: yes
+        recursive: no
+        key_file: "/home/{{ user }}/{{ ssh_key }}"
+      delegate_to: localhost
+      become: no
+      run_once: true
+
+    - name: "Copy .vimrc"
+      copy:
+        src: ./conf_tmp/.vimrc
+        dest: "/home/{{ user }}/.vimrc"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: '0644'
+
+    - name: "Copy .aliases"
+      copy:
+        src: ./conf_tmp/.aliases
+        dest: "/home/{{ user }}/.aliases"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: '0644'
+
+    - name: "Load aliases in .bashrc file"
+      blockinfile:
+        path: "/home/{{ user }}/.bashrc"
+        block: |
+          if [ -f ~/.aliases ]; then
+            source ~/.aliases
+          fi
