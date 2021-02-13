@@ -3,7 +3,7 @@
   become: yes
   vars:
     - user: 'loic'
-    - dotfiles_repo: 'git@github.com:lololand/config.git'
+    - conf_repo: 'git@github.com:lololand/config.git'
     - ssh_key: '.ssh/id_git'
 
   tasks:
@@ -12,8 +12,8 @@
         name:
           - vim 
           - bat
-          - exa
           - podman
+          - exa
           - python3
         state: latest
 
