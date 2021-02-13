@@ -3,7 +3,7 @@
   become: yes
   vars:
     - user: 'loic'
-    - conf_repo: 'git@github.com:lololand/config.git'
+    - conf_repo: 'git@github.com:pessonnier/config.git'
     - ssh_key: '.ssh/id_git'
 
   tasks:
