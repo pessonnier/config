@@ -27,12 +27,12 @@
       git:
         repo: "{{ conf_repo }}"
         dest: ./conf_tmp
-        accept_hostkey: yes
+        accept_hostkey: yes # sans effet
         force: yes
         recursive: no
-        key_file: "/home/{{ user }}/{{ ssh_key }}"
+        #key_file: "/home/{{ user }}/{{ ssh_key }}"
       delegate_to: localhost
-      become: no
+      become: loic
       run_once: true
 
     - name: "Copy .vimrc"
